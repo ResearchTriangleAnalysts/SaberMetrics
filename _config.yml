@@ -10,8 +10,8 @@ relative_permalinks: true
 title:            RTP SaberMetrics
 tagline:          'Analyzing sports and stuff'
 description:      'Analyze some sports data'
-url:              http://ResearchTriangleAnalysts.github.io/SaberMetrics/
-baseurl:          /
+url:              'http://ResearchTriangleAnalysts.github.io/SaberMetrics'
+baseurl:          'http://ResearchTriangleAnalysts.github.io/SaberMetrics'
 
 author:
   name:           'Research Triangle Analysts'
