@@ -1,0 +1,51 @@
+---
+  output: html_document
+---
+
+# Fun with Sa
+
+This brief document illustrates the use of the `DT` package. `DT` enables customizable responses in HTML with client-side java script. For this example, we'll use some data on baseball players' salaries. The data comes from http://seanlahman.com.
+
+I'm going to present this in a semi-live way. I'll talk through the changes, look at the results and then extend the examples. The final display is typically the only thing I'd keep. Here, we'll look at all the steps along the way. Note that I'm basing all my work on the examples shown at the project site for `datatable`, http://rstudio.github.io/DT/.
+
+First, we'll load the `DT` package. This version of the package has been installed from rstudio's GitHub repository using `devtools`.
+
+```{r }
+library(DT, quietly=TRUE)
+```
+
+We'll read in the data and, with just one line of code, we've got a table.
+
+```{r }
+salary <- read.csv("../data/Salaries.csv")
+datatable(salary)
+```
+
+That's not too bad. We can easily sort based on salary data to see who was paid most and least and we can change the display so that 10, 25, 50 or 100 entries are visible. If I sort the salaries in descending order, I can tell that the highest paid player is Alex Rodriguez, who earned (really?) $33 million in 2009. But the displayed name and my rudimentary knowledge of baseball are what allow me to do that. I'm going to tidy up the display so that it shows me a player's actual name and the full name of their team. I'll also get rid of the row names field which conveys nothing useful.
+
+First, let's have a look at the player data. This may be found in the "Master" data set from the Lahman site. To save a bit of space, I'm only going to show the first 1000 records.
+
+```{r }
+master <- read.csv("../data/Master.csv")
+datatable(head(master, 1000))
+```
+
+Ooh la la! I can see all the players and even copy and paste a name from the salary list into the master list and get the actual name. (You should try it!) Pretty neat, but let's go ahead and add the name into the salary list. Also, just for kicks, let's add in birth year, height and weight, the batting handedness, birth country and birth state.
+
+Because I'm trying to get comfortable with `dplyr`, we'll use that for the column subsetting. I have to be honest, typing in the column names without quotes and concatenation is pretty sweet.
+
+```{r }
+library(dplyr, quietly=TRUE)
+master <- select(master, playerID, nameFirst, nameLast, birthYear
+                 , height, weight, bats, birthCountry, birthState)
+```
+
+And now we'll merge. 
+
+```{r }
+salary <- merge(salary, master)
+salary <- select(salary, nameFirst, nameLast, salary, yearID, birthYear
+                 , height, weight, bats, birthCountry, birthState
+                 , teamID, lgID)
+datatable(salary, rownames=FALSE)
+```
